@@ -22,24 +22,21 @@ class CalendarsController < ApplicationController
   end
 
   def get_week
-
     require "date"
-    wdays = ['(日)','(月)','(火)','(水)','(木)','(金)','(土)','(日)','(月)','(火)','(水)','(木)','(金)','(土)']
-    
-
+    wdays = ['(日)','(月)','(火)','(水)','(木)','(金)','(土)']
     @todays_date = Date.today
     @week_days = []
     @plans = Plan.where(date: @todays_date..@todays_date + 7)
     
     7.times do |x|
-      @wday = wdays[@todays_date.wday + x]
+      # @wday = wdays[@todays_date.wday + x]
       
       plans = []
       plan = @plans.map do |plan|
         plans.push(plan.plan) if plan.date == @todays_date + x
       end
 
-      days = { :month => (@todays_date+x).month, :date => (@todays_date+x).day, :wday => @wday, :plans => plans}
+      days = { month: (@todays_date+x).month, date: (@todays_date+x).day, wday: wdays[(@todays_date+x).wday], plans: plans}
 
       @week_days.push(days)
     end
